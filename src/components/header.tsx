@@ -35,6 +35,11 @@ const Header = async ({ session }: { session: Session }) => {
             <Button>Logout</Button>
           </form>
         </li>
+        <li>
+          <Link href="/library">
+            <p className="text-[#ccc] fw-semibold">Library</p>
+          </Link>
+        </li>
       </ul>
     </header>
   );

@@ -4,24 +4,7 @@ import Link from "next/link";
 import React from "react";
 import { Button } from "./ui/button";
 import BookCover from "./backCover";
-
-interface Book {
-  id: string;
-  title: string;
-  author: string;
-  genre: string;
-  rating: number;
-  totalCopies: number;
-  availableCopies: number;
-  description: string;
-  coverColor: string;
-  coverUrl: string;
-  videoUrl: string;
-  summary: string;
-  cover:string;
-  createdAt: Date | null;
-  isLoanedBook?: boolean;
-}
+import { Book } from "@/src/lib/type";
 
 const BookCard = ({
   id,
@@ -29,7 +12,6 @@ const BookCard = ({
   genre,
   coverColor,
   coverUrl,
-  cover,
   isLoanedBook = false,
 }: Book) => {
   return (
@@ -38,7 +20,7 @@ const BookCard = ({
         href={`/books/${id}`}
         className={cn(isLoanedBook && "w-full flex flex-col items-center")}
       >
-        <BookCover coverColor={coverColor} coverImage={cover} />
+        <BookCover coverColor={coverColor} coverImage={coverUrl} />
 
         <div className={cn("mt-4", !isLoanedBook && "xs:max-w-40 max-w-28")}>
           <p className="book-title">{title}</p>

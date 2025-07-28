@@ -13,7 +13,7 @@ import { workflowClient } from "../workflow";
 import config from "../config";
 
 export const signInWithCredentials = async (
-  params: Pick<AuthCredentials, "email" | "password">,
+  params: Pick<AuthCredentials, "email" | "password">
 ) => {
   const { email, password } = params;
 
@@ -69,7 +69,7 @@ export const signUp = async (params: AuthCredentials) => {
       universityCard,
     });
 
-    // // Trigger the onboarding workflow
+    // Trigger the onboarding workflow
     // await workflowClient.trigger({
     //   url: `${config.env.apiEndpoint}/api/workflow/onboarding`,
     //   body: {

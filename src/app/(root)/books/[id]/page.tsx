@@ -1,7 +1,9 @@
 import { auth } from "@/auth";
 import BookOverview from "@/src/components/bookOverview";
 import BookVideo from "@/src/components/bookVideo";
-import { sampleBooks } from "@/src/constants";
+import { db } from "@/src/database/drizzle";
+import { books } from "@/src/database/schema";
+import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import React from "react";
 
@@ -9,13 +11,20 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const id = (await params).id;
   const session = await auth();
 
-  const bookDetails= ...sampleBooks;
+  // Fetch data based on id
+  const [bookDetails] = await db
+    .select()
+    .from(books)
+    .where(eq(books.id, id))
+    .limit(1);
+
+  if (!bookDetails) redirect("/404");
 
   return (
     <>
-      <BookOverview {...sampleBooks} userId={session?.user?.id as string} />
-    
-     <div className="book-details">
+      <BookOverview {...bookDetails} userId={session?.user?.id as string} />
+
+      <div className="book-details">
         <div className="flex-[1.5]">
           <section className="flex flex-col gap-7">
             <h3>Video</h3>
@@ -35,7 +44,6 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
         {/*  SIMILAR*/}
       </div>
-    
     </>
   );
 };

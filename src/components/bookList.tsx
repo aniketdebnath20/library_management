@@ -1,22 +1,6 @@
 import React from "react";
 import BookCard from "./bookCard";
-
-interface Book {
-  id: string;
-  title: string;
-  author: string;
-  genre: string;
-  rating: number;
-  totalCopies: number;
-  availableCopies: number;
-  description: string;
-  coverColor: string;
-  coverUrl: string;
-  videoUrl: string;
-  summary: string;
-  createdAt: Date | null;
-  cover:string;
-}
+import { Book } from "../lib/type";
 
 interface Props {
   title: string;
@@ -35,7 +19,7 @@ const BookList = ({ title, books, containerClassName }: Props) => {
 
       <ul className="book-list">
         {books.map((book) => (
-          <BookCard key={book.title} {...book} />
+          <BookCard key={book.id} {...book} />
         ))}
       </ul>
     </section>

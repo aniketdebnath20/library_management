@@ -8,6 +8,13 @@
       "when": 1753156011167,
       "tag": "0000_lively_kitty_pryde",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1753515728182,
+      "tag": "0001_complete_stature",
+      "breakpoints": true
     }
   ]
 }

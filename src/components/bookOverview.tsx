@@ -1,30 +1,17 @@
 import React from "react";
 import BookCover from "./backCover";
 import Image from "next/image";
-
-interface Book {
-  id: string;
-  title: string;
-  author: string;
-  genre: string;
-  rating: number;
-  totalCopies: number;
-  availableCopies: number;
-  description: string;
-  coverColor: string;
-  coverUrl: string;
-  videoUrl: string;
-  summary: string;
-  createdAt: Date | null;
-  cover: string;
-  userId:string; 
-}
+import { Book } from "../lib/type";
+// import BorrowBook from "./borrowBook";
+import { db } from "../database/drizzle";
+import { users } from "../database/schema";
+import { eq } from "drizzle-orm";
 
 interface Props extends Book {
   userId: string;
 }
 
-const BookOverview = ({
+const BookOverview = async ({
   title,
   author,
   genre,
@@ -34,12 +21,24 @@ const BookOverview = ({
   description,
   coverColor,
   coverUrl,
-  cover,
   id,
   userId,
 }: Props) => {
-
   console.log(userId);
+
+  const [user] = await db
+    .select()
+    .from(users)
+    .where(eq(users.id, userId))
+    .limit(1);
+
+  const borrowingEligibility = {
+    isEligible: availableCopies > 0 && user?.status === "APPROVED",
+    message:
+      availableCopies <= 0
+        ? "Book is not available"
+        : "You are not eligible to borrow this book",
+  };
 
   return (
     <>
@@ -90,14 +89,14 @@ const BookOverview = ({
               variant="wide"
               className="z-10"
               coverColor={coverColor}
-              coverImage={cover}
+              coverImage={coverUrl}
             />
 
             <div className="absolute left-16 top-10 rotate-12 opacity-40 max-sm:hidden">
               <BookCover
                 variant="wide"
                 coverColor={coverColor}
-                coverImage={cover}
+                coverImage={coverUrl}
               />
             </div>
           </div>
