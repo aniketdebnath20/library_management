@@ -24,16 +24,27 @@ export default function SearchBar() {
       }
     }, 300);
 
+
     return () => clearTimeout(delayDebounce);
   }, [search]);
 
   return (
     <>
       <div className="library">
-        <h3 className="library-subtitle">Search The Book You Want</h3>
-        <h3 className="library-title">Search The Book You Want</h3>
+        <h3 className="library-subtitle">Discover your next great read</h3>
+        <h3 className="library-title">
+          Explore And Search For <span className="text-amber-200"> Any Book </span> In
+          Our Library
+        </h3>
 
         <div className="search">
+          <Image
+            src="./icons/search-fill.svg"
+            alt="Search Icon"
+            width={25}
+            height={25}
+          />
+
           <Input
             name="search"
             type="text"
@@ -69,7 +80,9 @@ export default function SearchBar() {
           </ul>
         ) : (
           search && (
-            <p className="text-gray-500 text-[16px] w-100 mx-auto">No books found for “{search}”.</p>
+            <p className="text-gray-500 text-[16px] w-100 mx-auto">
+              No books found for “{search}”.
+            </p>
           )
         )}
       </div>

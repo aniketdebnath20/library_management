@@ -40,3 +40,14 @@ export interface BorrowBookParams {
   bookId: string;
   userId: string;
 }
+
+ export interface borrowedBooks {
+  id: string;
+  userId: string;
+  bookId: string;
+  borrowDate: number;
+  dueDate: number;
+  returnDate: number;
+  status: string;
+  createdAt: number;
+}

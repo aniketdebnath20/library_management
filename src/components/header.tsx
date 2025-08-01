@@ -9,8 +9,9 @@ import { Session } from "next-auth";
 const Header = async ({ session }: { session: Session }) => {
   return (
     <header className="my-10 flex justify-between gap-5">
-      <Link href="/">
+      <Link href="/" className="flex gap-2 items-center">
         <Image src="/icons/logo.svg" alt="logo" width={40} height={40} />
+        <p className="text-[27px] text-white font-semibold">Book Wise</p>
       </Link>
 
       <ul className="flex flex-row items-center gap-5">

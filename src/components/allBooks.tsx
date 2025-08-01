@@ -5,7 +5,6 @@ import BookList from "@/src/components/bookList";
 import { db } from "@/src/database/drizzle";
 import { books } from "@/src/database/schema";
 import { desc } from "drizzle-orm";
-import { Book } from "@/src/lib/type";
 
 export default async function AllBooks() {
   const latestBooks = await db
