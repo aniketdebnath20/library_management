@@ -36,6 +36,9 @@ export function RecpitDialog({ receiptData }: ReceiptProps) {
   const data = receiptData;
 
   const handleImageDownload = async () => {
+    // Wait 3 seconds (3000 ms)
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+
     const element = document.getElementById("receipt-content");
 
     if (!element) {
@@ -46,7 +49,7 @@ export function RecpitDialog({ receiptData }: ReceiptProps) {
     // html2canvas with better quality
     const canvas = await html2canvas(element, {
       scale: 1, // Higher scale for better resolution
-      backgroundColor: "#1f2937", // A solid dark background matching your dialog
+      backgroundColor: "#1f2937d3", // A solid dark background matching your dialog
       useCORS: true, // If you load external images
       allowTaint: true, // Allow cross-origin images (if needed)
       logging: false,
