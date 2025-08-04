@@ -59,7 +59,7 @@ const ProfilePage = async () => {
   return (
     <>
       <div className="flex flex-col items-center justify-between align-content-center gap-5 md:flex-row">
-        <main className="bg-[#1c2230] text-white flex items-center justify-center w-[-webkit-fill-available] sm:w-[42%] rounded-[40px]">
+        <main className="bg-[#1c2230] text-white flex items-center justify-center w-[-webkit-fill-available] sm:w-[60%] md:w-[40%] rounded-[40px]">
           <div className="bg-[#1c2230] rounded-2xl shadow-xl pt-6 pb-5 px-5 w-full max-w-sm relative">
             <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-[#2b3245] w-[60px] h-[70px] rounded-b-full flex">
               <div className="h-2 w-10 bg-[#1c2235] mx-auto mt-12 rounded-sm" />

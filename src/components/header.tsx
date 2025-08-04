@@ -2,7 +2,6 @@ import { auth, signOut } from "@/auth";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { Button } from "./ui/button";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import { getInitials } from "../lib/utils";
 import { Session } from "next-auth";
@@ -16,12 +15,29 @@ const Header = async ({ session }: { session: Session }) => {
 
       <ul className="flex flex-row items-center gap-5">
         <li>
-          <Link href="/my-profile">
+          <Link href="/">
+            <p className="text-[#ccc] fw-semibold">Home</p>
+          </Link>
+        </li>
+        <li>
+          <Link href="/library">
+            <p className="text-[#ccc] fw-semibold">Library</p>
+          </Link>
+        </li>
+
+        <li>
+          <Link
+            href="/my-profile"
+            className="flex flex-row justify-center items-center gap-2"
+          >
             <Avatar>
               <AvatarFallback className="bg-amber-100">
                 {getInitials(session?.user?.name || "IN")}
               </AvatarFallback>
             </Avatar>
+            <p className="text-[#ccc] font-bold text-sm">
+              {session?.user?.name}
+            </p>
           </Link>
         </li>
         <li>
@@ -33,13 +49,13 @@ const Header = async ({ session }: { session: Session }) => {
             }}
             className=""
           >
-            <Button>Logout</Button>
+            <Image
+              src="/icons/logout.svg"
+              alt="Logout"
+              width={25}
+              height={25}
+            />
           </form>
-        </li>
-        <li>
-          <Link href="/library">
-            <p className="text-[#ccc] fw-semibold">Library</p>
-          </Link>
         </li>
       </ul>
     </header>
