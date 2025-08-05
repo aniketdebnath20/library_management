@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "@/src/components/ui/button";
 import Link from "next/link";
+import BookRecords from "@/src/components/admin/bookRecords";
 
 const Page = () => {
   return (
@@ -15,7 +16,9 @@ const Page = () => {
       </div>
 
       <div className="mt-7 w-full overflow-hidden">
-        <p>Table</p>
+        <p className="text-black font-bold">All Books</p>
+
+        <BookRecords />
       </div>
     </section>
   );
