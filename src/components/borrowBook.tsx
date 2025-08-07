@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -16,7 +16,7 @@ interface Props {
   };
 }
 
-const BorrowBook = ({
+const BorrowBook =  ({
   userId,
   bookId,
   borrowingEligibility: { isEligible, message },
@@ -24,44 +24,46 @@ const BorrowBook = ({
   const router = useRouter();
   const [borrowing, setBorrowing] = useState(false);
 
-  const handleBorrowBook = async () => {
-    if (!isEligible) {
+const handleBorrowBook = async () => {
+  if (!isEligible) {
+    toast({
+      title: "Error",
+      description: message,
+      variant: "destructive",
+    });
+    return; // 🔥 Stop execution here if not eligible
+  }
+
+  setBorrowing(true);
+
+  try {
+    const result = await borrowBook({ bookId, userId });
+
+    if (result.success) {
+      toast({
+        title: "Success",
+        description: "Book borrowed successfully",
+      });
+
+      router.push("/");
+    } else {
       toast({
         title: "Error",
-        description: message,
+        description: result.error,
         variant: "destructive",
       });
     }
+  } catch (error) {
+    toast({
+      title: "Error",
+      description: "An error occurred while borrowing the book",
+      variant: "destructive",
+    });
+  } finally {
+    setBorrowing(false);
+  }
+};
 
-    setBorrowing(true);
-
-    try {
-      const result = await borrowBook({ bookId, userId });
-
-      if (result.success) {
-        toast({
-          title: "Success",
-          description: "Book borrowed successfully",
-        });
-
-        router.push("/");
-      } else {
-        toast({
-          title: "Error",
-          description: result.error,
-          variant: "destructive",
-        });
-      }
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "An error occurred while borrowing the book",
-        variant: "destructive",
-      });
-    } finally {
-      setBorrowing(false);
-    }
-  };
 
   return (
     <Button

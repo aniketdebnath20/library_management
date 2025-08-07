@@ -11,7 +11,6 @@ const pages = async () => {
   return (
     <>
       <div className="w-full">
-        {/* Desktop Table */}
         <div className="hidden md:block overflow-x-auto border rounded-lg">
           <table className="min-w-full table-fixed text-sm bg-white">
             <thead className="bg-gray-50">
@@ -40,7 +39,11 @@ const pages = async () => {
                   <td className="px-4 py-3">
                     {" "}
                     {user.createdAt
-                      ? `${new Date(user.createdAt).getFullYear()} - ${new Date(user.createdAt).getDate()}`
+                      ? new Date(user.createdAt).toLocaleDateString("en-IN", {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                        })
                       : "N/A"}
                   </td>
                   <td className="px-4 py-3">

@@ -1,11 +1,11 @@
-import React from "react";
-import BookCover from "./backCover";
+// import BorrowBook from "./borrowBook";
+
+import { db } from "@/src/database/drizzle";
+import { users } from "@/src/database/schema";
+import { Book } from "@/src/lib/type";
 import Image from "next/image";
-import { Book } from "../lib/type";
-import { db } from "../database/drizzle";
-import { users } from "../database/schema";
+import BookCover from "../backCover";
 import { eq } from "drizzle-orm";
-import BorrowBook from "./borrowBook";
 
 interface Props extends Book {
   userId: string;
@@ -32,55 +32,39 @@ const BookOverview = async ({
     .where(eq(users.id, userId))
     .limit(1);
 
-  const borrowingEligibility = {
-    isEligible: availableCopies > 0 && user?.status === "APPROVED",
-    message:
-      availableCopies <= 0
-        ? "Book is not available"
-        : "You are not eligible to borrow this book",
-  };
-
   return (
     <>
       <section className="book-overview">
         <div className="flex flex-1 flex-col gap-5">
-          <h1>{title}</h1>
+          <h1 style={{ color: "#e7c9a5" }}>{title}</h1>
 
           <div className="book-info">
-            <p>
-              By <span className="font-semibold text-light-200">{author}</span>
+            <p className="text-gray-500">
+              By <span className="font-semibold text-primary">{author}</span>
             </p>
 
-            <p>
+            <p className="text-gray-500">
               Category{" "}
-              <span className="font-semibold text-light-200">{genre}</span>
+              <span className="font-semibold text-primary">{genre}</span>
             </p>
 
             <div className="flex flex-row gap-1">
               <Image src="/icons/star.svg" alt="star" width={22} height={22} />
-              <p>{rating}</p>
+              <p className="text-gray-500">{rating}</p>
             </div>
           </div>
 
           <div className="book-copies">
-            <p>
+            <p style={{ color: "#6b7280" }}>
               Total Books <span>{totalCopies}</span>
             </p>
 
-            <p>
+            <p style={{ color: "#6b7280" }}>
               Available Books <span>{availableCopies}</span>
             </p>
           </div>
 
-          <p className="book-description">{description}</p>
-
-          {user && (
-            <BorrowBook
-              bookId={id}
-              userId={userId}
-              borrowingEligibility={borrowingEligibility}
-            />
-          )}
+          <p className="book-description text-gray-500">{description}</p>
         </div>
 
         <div className="relative flex flex-1 justify-center">

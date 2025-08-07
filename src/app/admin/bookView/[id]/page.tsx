@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import BookOverview from "@/src/components/bookOverview";
+import BookOverview from "@/src/components/admin/bookOverView";
 import BookVideo from "@/src/components/bookVideo";
 import { db } from "@/src/database/drizzle";
 import { books } from "@/src/database/schema";
@@ -36,7 +36,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
             <div className="space-y-5 text-xl text-light-100">
               {bookDetails.summary.split("\n").map((line, i) => (
-                <p key={i}>{line}</p>
+                <p key={i} className="text-gray-500">{line}</p>
               ))}
             </div>
           </section>
