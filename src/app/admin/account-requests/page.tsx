@@ -71,13 +71,7 @@ const pages = async () => {
                   </span>
                 </td>
                 <td className="px-4 py-3">
-                  {user.status === "APPROVED" ? (
-                    <ApproveButton userId={user.id} />
-                  ) : (
-                    <button className="px-4 py-2 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200 transition-all flex items-center gap-1">
-                      Account Approved
-                    </button>
-                  )}
+                  <ApproveButton userId={user.id} userStatus={user.status} />
                 </td>
               </tr>
             ))}
@@ -117,7 +111,7 @@ const pages = async () => {
               <UserIdCard userImage={user.universityCard} />
             </div>
             <div>
-              <p className="text-sm text-gray-500">Status</p>
+              <p className="text-sm text-gray-500 pb-2">Status</p>
               <span
                 className={`inline-block rounded-md px-4 py-2 text-xs font-medium ${getStatusClasses(user.status)}`}
               >
@@ -125,9 +119,7 @@ const pages = async () => {
               </span>
             </div>
             <div>
-              <button className="mt-2 w-full text-xs bg-green-100 text-green-700 rounded py-2 hover:bg-green-200 transition-all">
-                Approve Account
-              </button>
+                <ApproveButton userId={user.id} userStatus={user.status} />
             </div>
           </div>
         ))}

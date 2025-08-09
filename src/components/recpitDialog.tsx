@@ -16,18 +16,19 @@ import html2canvas from "html2canvas";
 
 interface ReceiptProps {
   receiptData: {
-    id: string;
-    userId: string;
-    bookId: string;
-    borrowDate: number;
-    dueDate: number;
+    id: number;
+    borrowDate: string;
+    dueDate: string;
     book: {
-      id: string;
+      id: number;
       title: string;
-      genre: string;
-      coverColor: string;
-      coverUrl: string;
       author: string;
+      genre : string;
+    };
+    user: {
+      id: number;
+      name: string;
+      email: string;
     };
   };
 }
