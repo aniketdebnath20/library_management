@@ -24,6 +24,7 @@ export interface AuthCredentials {
 }
 
 export interface BookParams {
+  id: string;
   title: string;
   author: string;
   genre: string;
@@ -41,7 +42,7 @@ export interface BorrowBookParams {
   userId: string;
 }
 
- export interface borrowedBooks {
+export interface borrowedBooks {
   id: string;
   userId: string;
   bookId: string;

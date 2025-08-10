@@ -15,16 +15,16 @@ import {
 import { Input } from "@/src/components/ui/input";
 import { useRouter } from "next/navigation";
 import { Button } from "@/src/components/ui/button";
-import { createBook } from "@/src/lib/admin/actions/book";
+import { createBook, updateBook } from "@/src/lib/admin/actions/book";
 import { Book } from "@/src/lib/type";
 import { bookSchema } from "@/src/lib/validation";
 import { toast } from "@/src/hook/use-toast";
 import ColorPicker from "../colorPicker";
 import FileUpload from "../../fileUpload";
-import { Textarea } from "@/components/ui/textarea";
+import { Textarea } from "@/src/components/ui/textarea";
 
 interface Props extends Partial<Book> {
-  type?: "create" | "update";
+  type: "create" | "update";
 }
 
 const BookForm = ({ type, ...book }: Props) => {
@@ -33,33 +33,50 @@ const BookForm = ({ type, ...book }: Props) => {
   const form = useForm<z.infer<typeof bookSchema>>({
     resolver: zodResolver(bookSchema),
     defaultValues: {
-      title: "",
-      description: "",
-      author: "",
-      genre: "",
-      rating: 1,
-      totalCopies: 1,
-      coverUrl: "",
-      coverColor: "",
-      videoUrl: "",
-      summary: "",
+      title: book.title || "",
+      description: book.description || "",
+      author: book.author || "",
+      genre: book.genre || "",
+      rating: book.rating || 1,
+      totalCopies: book.totalCopies || 1,
+      coverUrl: book.coverUrl || "",
+      coverColor: book.coverColor || "",
+      videoUrl: book.videoUrl || "",
+      summary: book.summary || "",
     },
   });
 
   const onSubmit = async (values: z.infer<typeof bookSchema>) => {
-    const result = await createBook(values);
-
-    if (result.success) {
-      toast({
-        title: "Success",
-        description: "Book created successfully",
-      });
-
-      router.push(`/admin/books/${result.data.id}`);
-    } else {
+    try {
+      if (type === "update") {
+        const result = await updateBook({ ...values, id: book.id! });
+        if (result.success) {
+          toast({ title: "Success", description: "Book updated successfully" });
+          router.push(`/admin/bookView/${result.data.id}`);
+        } else {
+          toast({
+            title: "Error",
+            description: result.message,
+            variant: "destructive",
+          });
+        }
+      } else {
+        const result = await createBook(values);
+        if (result.success) {
+          toast({ title: "Success", description: "Book created successfully" });
+          router.push(`/admin/bookView/${result.data.id}`);
+        } else {
+          toast({
+            title: "Error",
+            description: result.message,
+            variant: "destructive",
+          });
+        }
+      }
+    } catch (err) {
       toast({
         title: "Error",
-        description: result.message,
+        description: "Something went wrong",
         variant: "destructive",
       });
     }
@@ -68,9 +85,10 @@ const BookForm = ({ type, ...book }: Props) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        {/* Title */}
         <FormField
           control={form.control}
-          name={"title"}
+          name="title"
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
               <FormLabel className="text-base font-normal text-dark-500">
@@ -88,9 +106,11 @@ const BookForm = ({ type, ...book }: Props) => {
             </FormItem>
           )}
         />
+
+        {/* Author */}
         <FormField
           control={form.control}
-          name={"author"}
+          name="author"
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
               <FormLabel className="text-base font-normal text-dark-500">
@@ -108,9 +128,11 @@ const BookForm = ({ type, ...book }: Props) => {
             </FormItem>
           )}
         />
+
+        {/* Genre */}
         <FormField
           control={form.control}
-          name={"genre"}
+          name="genre"
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
               <FormLabel className="text-base font-normal text-dark-500">
@@ -129,9 +151,10 @@ const BookForm = ({ type, ...book }: Props) => {
           )}
         />
 
+        {/* Rating */}
         <FormField
           control={form.control}
-          name={"rating"}
+          name="rating"
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
               <FormLabel className="text-base font-normal text-dark-500">
@@ -145,6 +168,7 @@ const BookForm = ({ type, ...book }: Props) => {
                   placeholder="Book rating"
                   {...field}
                   className="book-form_input"
+                  onChange={(e) => field.onChange(Number(e.target.value))}
                 />
               </FormControl>
               <FormMessage />
@@ -152,9 +176,10 @@ const BookForm = ({ type, ...book }: Props) => {
           )}
         />
 
+        {/* Total Copies */}
         <FormField
           control={form.control}
-          name={"totalCopies"}
+          name="totalCopies"
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
               <FormLabel className="text-base font-normal text-dark-500">
@@ -168,6 +193,7 @@ const BookForm = ({ type, ...book }: Props) => {
                   placeholder="Total copies"
                   {...field}
                   className="book-form_input"
+                  onChange={(e) => field.onChange(Number(e.target.value))}
                 />
               </FormControl>
               <FormMessage />
@@ -175,9 +201,10 @@ const BookForm = ({ type, ...book }: Props) => {
           )}
         />
 
+        {/* Cover URL */}
         <FormField
           control={form.control}
-          name={"coverUrl"}
+          name="coverUrl"
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
               <FormLabel className="text-base font-normal text-dark-500">
@@ -198,9 +225,11 @@ const BookForm = ({ type, ...book }: Props) => {
             </FormItem>
           )}
         />
+
+        {/* Cover Color */}
         <FormField
           control={form.control}
-          name={"coverColor"}
+          name="coverColor"
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
               <FormLabel className="text-base font-normal text-dark-500">
@@ -216,9 +245,11 @@ const BookForm = ({ type, ...book }: Props) => {
             </FormItem>
           )}
         />
+
+        {/* Description */}
         <FormField
           control={form.control}
-          name={"description"}
+          name="description"
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
               <FormLabel className="text-base font-normal text-dark-500">
@@ -232,15 +263,15 @@ const BookForm = ({ type, ...book }: Props) => {
                   className="book-form_input"
                 />
               </FormControl>
-
               <FormMessage />
             </FormItem>
           )}
         />
 
+        {/* Video URL */}
         <FormField
           control={form.control}
-          name={"videoUrl"}
+          name="videoUrl"
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
               <FormLabel className="text-base font-normal text-dark-500">
@@ -261,9 +292,11 @@ const BookForm = ({ type, ...book }: Props) => {
             </FormItem>
           )}
         />
+
+        {/* Summary */}
         <FormField
           control={form.control}
-          name={"summary"}
+          name="summary"
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
               <FormLabel className="text-base font-normal text-dark-500">
@@ -277,17 +310,17 @@ const BookForm = ({ type, ...book }: Props) => {
                   className="book-form_input"
                 />
               </FormControl>
-
               <FormMessage />
             </FormItem>
           )}
         />
 
         <Button type="submit" className="book-form_btn text-white">
-          Add Book to Library
+          {type === "update" ? "Update Book" : "Add Book to Library"}
         </Button>
       </form>
     </Form>
   );
 };
+
 export default BookForm;

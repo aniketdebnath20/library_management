@@ -1,23 +1,25 @@
 import { Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/src/components/ui/button";
-import { auth } from "@/auth";
 import { db } from "@/src/database/drizzle";
 import { books } from "@/src/database/schema";
 import { Book } from "@/src/lib/type";
 import { desc } from "drizzle-orm";
-import { redirect } from "next/navigation";
 import Link from "next/link";
 import CoverImage from "./coverImage";
+import DeleteBook from "./deleteBook";
+import { redirect } from "next/navigation";
+import { auth } from "@/auth";
 
 const BookRecords = async () => {
-  const session = await auth();
-
   const latestBooks = (await db
     .select()
     .from(books)
     .orderBy(desc(books.createdAt))) as Book[];
 
+  const session = await auth();   
   if (!session) return redirect("/sign-up");
+
+
 
   return (
     <div className="w-full">
@@ -93,11 +95,13 @@ const BookRecords = async () => {
                 {/* Icons */}
                 <td className="w-[15%] px-4 py-4">
                   <div className="flex items-center gap-3">
-                    <Pencil
-                      className="text-blue-600 cursor-pointer"
-                      size={16}
-                    />
-                    <Trash2 className="text-red-600 cursor-pointer" size={16} />
+                       <Link href={`/admin/books/edit/${book.id}`}>
+                      <Pencil
+                        className="text-blue-600 cursor-pointer"
+                        size={16}
+                      />
+                    </Link>
+                    <DeleteBook bookId={book.id} />
                   </div>
                 </td>
               </tr>
@@ -142,8 +146,10 @@ const BookRecords = async () => {
                 </Button>
               </Link>
               <div className="flex gap-3">
-                <Pencil className="text-blue-600 cursor-pointer" size={16} />
-                <Trash2 className="text-red-600 cursor-pointer" size={16} />
+                <Link href={`/admin/books/edit/${book.id}`}>
+                  <Pencil className="text-blue-600 cursor-pointer" size={16} />
+                </Link>
+                <DeleteBook bookId={book.id} />
               </div>
             </div>
           </div>
