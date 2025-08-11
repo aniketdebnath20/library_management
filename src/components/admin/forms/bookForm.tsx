@@ -33,16 +33,16 @@ const BookForm = ({ type, ...book }: Props) => {
   const form = useForm<z.infer<typeof bookSchema>>({
     resolver: zodResolver(bookSchema),
     defaultValues: {
-      title: book.title || "",
-      description: book.description || "",
-      author: book.author || "",
-      genre: book.genre || "",
-      rating: book.rating || 1,
-      totalCopies: book.totalCopies || 1,
-      coverUrl: book.coverUrl || "",
-      coverColor: book.coverColor || "",
-      videoUrl: book.videoUrl || "",
-      summary: book.summary || "",
+      title: book.title ?? "",
+      description: book.description ?? "",
+      author: book.author ?? "",
+      genre: book.genre ?? "",
+      rating: book.rating ?? 1, // already number
+      totalCopies: book.totalCopies ?? 1, // already number
+      coverUrl: book.coverUrl ?? "",
+      coverColor: book.coverColor ?? "",
+      videoUrl: book.videoUrl ?? "",
+      summary: book.summary ?? "",
     },
   });
 

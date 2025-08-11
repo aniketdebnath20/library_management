@@ -24,7 +24,7 @@ export interface AuthCredentials {
 }
 
 export interface BookParams {
-  id: string;
+  id?: string;
   title: string;
   author: string;
   genre: string;

@@ -14,17 +14,15 @@ export const signInSchema = z.object({
 });
 
 export const bookSchema = z.object({
-  title: z.string().trim().min(2).max(100),
-  description: z.string().trim().min(10).max(1000),
-  author: z.string().trim().min(2).max(100),
-  genre: z.string().trim().min(2).max(50),
-  rating: z.coerce.number().min(1).max(5),
-  totalCopies: z.coerce.number().int().positive().lte(10000),
-  coverUrl: z.string().nonempty(),
-  coverColor: z
-    .string()
-    .trim()
-    .regex(/^#[0-9A-F]{6}$/i),
-  videoUrl: z.string().nonempty(),
-  summary: z.string().trim().min(10),
+  title: z.string().trim().min(2, "Title must be at least 2 characters").max(100, "Title cannot exceed 100 characters"),
+  description: z.string().trim().min(10, "Description must be at least 10 characters").max(1000, "Description cannot exceed 1000 characters"),
+  author: z.string().trim().min(2, "Author name must be at least 2 characters").max(100, "Author name cannot exceed 100 characters"),
+  genre: z.string().trim().min(2, "Genre must be at least 2 characters").max(50, "Genre cannot exceed 50 characters"),
+  rating: z.number().min(1, "Rating must be at least 1").max(5, "Rating cannot exceed 5"),
+  totalCopies: z.number().int().positive("Total copies must be a positive number").lte(10000, "Total copies cannot exceed 10,000"),
+  coverUrl: z.string().url("Cover URL must be a valid URL"),
+  coverColor: z.string().trim().regex(/^#[0-9A-F]{6}$/i, "Cover color must be a valid hex color code"),
+  videoUrl: z.string().url("Video URL must be a valid URL"),
+  summary: z.string().trim().min(10, "Summary must be at least 10 characters"),
 });
+

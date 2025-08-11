@@ -29,7 +29,7 @@ export const createBook = async (params: BookParams) => {
   }
 };
 
-export const updateBook = async (params: BookParams) => {
+export const updateBook = async (params: BookParams & { id: string }) => {
   try {
     const updatedBook = await db
       .update(books)
