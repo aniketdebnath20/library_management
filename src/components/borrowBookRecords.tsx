@@ -9,19 +9,26 @@ interface BookProps {
   titles: string;
   mergedData: {
     id: string;
-    userId: string;
-    bookId: string;
-    borrowDate: number;
-    dueDate: number;
+    status: "BORROWED" | "RETURNED";
+    borrowDate: Date; // match the query
+    dueDate: string; // match the query
     book: {
       id: string;
       title: string;
       genre: string;
       coverColor: string;
       coverUrl: string;
+      author:string;
+    };
+    user: {
+      id: string;
+      name: string;
+      email: string;
+      universityCard: string;
     };
   }[];
 }
+
 
 const BorrowBookRecords = ({ titles, mergedData }: BookProps) => {
   function hexToRgba(hex: string, alpha: number) {
@@ -95,7 +102,7 @@ const BorrowBookRecords = ({ titles, mergedData }: BookProps) => {
                     backgroundColor: `${hexToRgba(data.book.coverColor, 0.7)}`,
                   }}
                 >
-                  <RecpitDialog receiptData={data}  />
+                  <RecpitDialog receiptData={data} />
                 </div>
               </div>
             </div>

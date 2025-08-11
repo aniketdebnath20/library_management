@@ -16,6 +16,9 @@ export default async function BorrowRecords() {
         id: books.id,
         title: books.title,
         coverUrl: books.coverUrl,
+        genre: books.genre,
+        coverColor: books.coverColor,
+        author: books.author,
       },
       user: {
         id: users.id,
@@ -157,7 +160,7 @@ export default async function BorrowRecords() {
                   </td>
                   <td className="px-3 py-3">
                     <div className="px-3 py-1 text-xs bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition">
-                      <RecpitDialog receiptData={record} />
+                      {/* <RecpitDialog receiptData={record} /> */}
                     </div>
                   </td>
                 </tr>

@@ -1,18 +1,18 @@
 import { auth } from "@/auth";
 import { books, borrowRecords, users } from "@/src/database/schema";
 import { redirect } from "next/navigation";
-import config from "@/src/lib/config";
-import UserCardImage from "@/src/components/usercardimage";
-import { CheckCircle2 } from "lucide-react";
-import { getInitials } from "@/src/lib/utils";
 import { eq } from "drizzle-orm";
 import { db } from "@/src/database/drizzle";
+import { CheckCircle2 } from "lucide-react";
+import { getInitials } from "@/src/lib/utils";
+import UserCardImage from "@/src/components/usercardimage";
+import config from "@/src/lib/config";
 import BorrowBookRecords from "@/src/components/borrowBookRecords";
 
 const ProfilePage = async () => {
   const session = await auth();
   if (!session?.user?.email) redirect("/sign-in");
-
+  // 1️⃣ Get the user first (for their ID)
   const userData = await db
     .select({
       id: users.id,
@@ -25,36 +25,35 @@ const ProfilePage = async () => {
     .where(eq(users.email, session.user.email))
     .limit(1);
 
+  if (!userData.length) return null; // No such user
   const user = userData[0];
 
-  // 3. Get borrow records for this user
+  // 2️⃣ Get borrow records merged with book & user info
   const borrowRecordsData = await db
-    .select()
+    .select({
+      id: borrowRecords.id,
+      status: borrowRecords.status,
+      borrowDate: borrowRecords.borrowDate,
+      dueDate: borrowRecords.dueDate,
+      book: {
+        id: books.id,
+        title: books.title,
+        author: books.author,
+        coverUrl: books.coverUrl,
+        genre : books.genre,
+        coverColor: books.coverColor,
+      },
+      user: {
+        id: users.id,
+        name: users.fullName,
+        email: users.email,
+        universityCard: users.universityCard,
+      },
+    })
     .from(borrowRecords)
+    .innerJoin(books, eq(borrowRecords.bookId, books.id))
+    .innerJoin(users, eq(borrowRecords.userId, users.id))
     .where(eq(borrowRecords.userId, user.id));
-
-  console.log("Borrow records", borrowRecordsData);
-
-  // 4. Get book info based on borrow records
-  // Optional: map multiple bookIds if user has borrowed more than one book
-  const borrowedBooks = await Promise.all(
-    borrowRecordsData.map((record) =>
-      db
-        .select()
-        .from(books)
-        .where(eq(books.id, record.bookId))
-        .then((res) => res[0])
-    )
-  );
-
-  console.log("Books borrowed", borrowedBooks);
-
-  const mergedRecords = borrowRecordsData.map((record, index) => ({
-    ...record,
-    book: borrowedBooks[index],
-  }));
-
-  console.log("merged the two diff data",mergedRecords);
 
   return (
     <>
@@ -97,12 +96,10 @@ const ProfilePage = async () => {
           </div>
         </main>
 
-        {/* <div> */}
           <BorrowBookRecords
             titles="Borrow Books"
-            mergedData={mergedRecords}
+            mergedData={borrowRecordsData}
           />
-        {/* </div> */}
       </div>
     </>
   );

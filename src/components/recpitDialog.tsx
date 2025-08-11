@@ -11,27 +11,30 @@ import {
 } from "./ui/dialog";
 import { FileDown } from "lucide-react";
 import Image from "next/image";
-import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
 interface ReceiptProps {
   receiptData: {
-    id: number;
-    borrowDate: string;
-    dueDate: string;
+    id: string;
+    status: "BORROWED" | "RETURNED";
+    borrowDate: Date; // match the query
+    dueDate: string; // match the query
     book: {
-      id: number;
+      id: string;
       title: string;
+      genre: string;
       author: string;
-      genre : string;
+      coverColor: string;
+      coverUrl: string;
     };
     user: {
-      id: number;
+      id: string;
       name: string;
       email: string;
+      universityCard: string;
     };
-  };
-}
+  }
+};
 
 export function RecpitDialog({ receiptData }: ReceiptProps) {
   const data = receiptData;

@@ -9,8 +9,8 @@ import ratelimit from "@/src/lib/ratelimit";
 import { redirect } from "next/navigation";
 import { AuthCredentials } from "@/src/lib/type";
 import { hash } from "bcryptjs";
-import { workflowClient } from "../workflow";
-import config from "../config";
+// import { workflowClient } from "../workflow";
+// import config from "../config";
 
 export const signInWithCredentials = async (
   params: Pick<AuthCredentials, "email" | "password">
