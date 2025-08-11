@@ -1,13 +1,11 @@
-import { auth } from "@/auth";
+import CoverImage from "@/src/components/admin/coverImage";
 import { RecpitDialog } from "@/src/components/recpitDialog";
 import UserImage from "@/src/components/userImage";
 import { db } from "@/src/database/drizzle";
 import { books, users, borrowRecords } from "@/src/database/schema";
-import { desc, eq } from "drizzle-orm";
-import { redirect } from "next/navigation";
+import { eq } from "drizzle-orm";
 
 export default async function BorrowRecords() {
-
   const borrowRecordsData = await db
     .select({
       id: borrowRecords.id,
@@ -17,6 +15,7 @@ export default async function BorrowRecords() {
       book: {
         id: books.id,
         title: books.title,
+        coverUrl: books.coverUrl,
       },
       user: {
         id: users.id,
@@ -69,11 +68,7 @@ export default async function BorrowRecords() {
               {borrowRecordsData.map((record, index) => (
                 <tr key={index} className="border-t">
                   <td className="px-2 py-3 flex items-center gap-2">
-                    {/* <img
-                      src={record.bookCover}
-                      alt={record.bookTitle}
-                      className="w-8 h-12 object-cover rounded"
-                    /> */}
+                    <CoverImage coverImage={record.book.coverUrl} />
                     <span>{record.book.title}</span>
                   </td>
                   <td className="px-4 py-3">
@@ -161,7 +156,7 @@ export default async function BorrowRecords() {
                     </span>
                   </td>
                   <td className="px-3 py-3">
-                    <div className="px-3 py-2 mx-auto text-xs bg-purple-100 text-purple-700 rounded-md hover:bg-purple-200 transition">
+                    <div className="px-3 py-1 text-xs bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition">
                       <RecpitDialog receiptData={record} />
                     </div>
                   </td>
@@ -172,43 +167,60 @@ export default async function BorrowRecords() {
         </div>
 
         {/* Card layout on small screens */}
-        {/* <div className="md:hidden space-y-4">
-          {records.map((record) => (
+        <div className="md:hidden space-y-4">
+          {borrowRecordsData.map((record) => (
             <div
               key={record.id}
               className="bg-white border border-gray-200 rounded-lg p-4 flex flex-col gap-3"
             >
               <div className="flex items-center gap-3">
-                <img
-                  src={record.bookCover}
-                  alt={record.bookTitle}
-                  className="w-12 h-16 object-cover rounded"
-                />
+                <CoverImage coverImage={record.book.coverUrl} />
                 <div>
-                  <h2 className="font-semibold">{record.bookTitle}</h2>
-                  <p className="text-xs text-gray-500">{record.borrowedDate} - Due {record.dueDate}</p>
+                  <h2 className="font-semibold">{record.book.title}</h2>
+                  <p className="text-xs text-gray-500">
+                    {record.borrowDate
+                      ? new Date(record.borrowDate).toLocaleDateString(
+                          "en-IN",
+                          {
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
+                          }
+                        )
+                      : "N/A"}{" "}
+                    - Due{" "}
+                    {record.dueDate
+                      ? new Date(record.dueDate).toLocaleDateString("en-IN", {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                        })
+                      : "N/A"}
+                  </p>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-xs font-semibold">
-                  {record.user.initials}
+              <div className="flex items-center gap-2 pt-3">
+                <div className="w-10 h-10 rounded-md">
+                  <UserImage userImage={record.user.universityCard || ""} />
                 </div>
                 <div>
                   <div className="font-medium">{record.user.name}</div>
-                  <div className="text-xs text-gray-500">{record.user.email}</div>
+                  <div className="text-xs text-gray-500">
+                    {record.user.email}
+                  </div>
                 </div>
               </div>
               <div className="flex items-center justify-between">
                 <span className="px-2 py-1 rounded-full bg-purple-100 text-purple-700 text-xs">
                   {record.status}
                 </span>
-                <button className="px-3 py-1 text-xs bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition">
-                  Generate
-                </button>
+                <div className="px-3 py-1 text-xs bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition">
+                  <RecpitDialog receiptData={record} />
+                </div>
               </div>
             </div>
           ))}
-        </div> */}
+        </div>
       </main>
     </div>
   );
