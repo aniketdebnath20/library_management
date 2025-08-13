@@ -1,4 +1,3 @@
-// /api/admin/approve-status/route.ts
 import { db } from "@/src/database/drizzle";
 import { users } from "@/src/database/schema";
 import { eq } from "drizzle-orm";
