@@ -13,8 +13,7 @@ const Header = ({ session }: { session: Session }) => {
         </p>
       </div>
 
-      {/*<p>Search</p>*/}
-      <SearchBar />
+      {/* <SearchBar /> */}
     </header>
   );
 };

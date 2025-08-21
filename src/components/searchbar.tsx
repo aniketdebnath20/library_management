@@ -1,5 +1,3 @@
-// src/components/searchBar.tsx
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -13,28 +11,34 @@ export default function SearchBar() {
   const [search, setSearch] = useState("");
   const [filteredBooks, setFilteredBooks] = useState<Book[]>([]);
 
-  useEffect(() => {
-    const delayDebounce = setTimeout(() => {
-      if (search.trim()) {
-        fetch(`/api/books?q=${search}`)
-          .then((res) => res.json())
-          .then((data) => setFilteredBooks(data.books));
-      } else {
-        setFilteredBooks([]);
-      }
-    }, 300);
+  if (
+    search == null ||
+    search.length > 0 ||
+    search.trim() === "" ||
+    search === undefined
+  ) {
+    useEffect(() => {
+      const delayDebounce = setTimeout(() => {
+        if (search.trim()) {
+          fetch(`/api/books?q=${search}`)
+            .then((res) => res.json())
+            .then((data) => setFilteredBooks(data.books));
+        } else {
+          setFilteredBooks([]);
+        }
+      }, 300);
 
-
-    return () => clearTimeout(delayDebounce);
-  }, [search]);
-
+      return () => clearTimeout(delayDebounce);
+    }, [search]);
+  }
+  
   return (
     <>
       <div className="library">
         <h3 className="library-subtitle">Discover your next great read</h3>
         <h3 className="library-title">
-          Explore And Search For <span className="text-amber-200"> Any Book </span> In
-          Our Library
+          Explore And Search For{" "}
+          <span className="text-amber-200"> Any Book </span> In Our Library
         </h3>
 
         <div className="search">

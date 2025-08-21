@@ -16,7 +16,8 @@ export async function GET(request: Request) {
   const result = await db
     .select()
     .from(books)
-    .where(ilike(books.title, `%${query}%`)); // case-insensitive LIKE
+    .where(ilike(books.title, `%${query}%`)) // case-insensitive LIKE
+    .limit(1);
 
   return NextResponse.json({ books: result });
 

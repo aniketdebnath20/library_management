@@ -5,10 +5,17 @@ import React from "react";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import { getInitials } from "../lib/utils";
 import { Session } from "next-auth";
+import { db } from "../database/drizzle";
+import { users } from "../database/schema";
+import { eq } from "drizzle-orm";
 const Header = async ({ session }: { session: Session }) => {
+  const userRole = session?.user?.id
+    ? await db.select().from(users).where(eq(users.id, session.user.id))
+    : [];
+
   return (
-    <header className="my-10 flex justify-between gap-5">
-      <Link href="/" className="flex gap-2 items-center">
+    <header className="my-10 justify-between mx-auto align-center gap-5 flex-row sm:flex">
+      <Link href="/" className="flex gap-2 items-center pb-4 sm:pb-0">
         <Image src="/icons/logo.svg" alt="logo" width={40} height={40} />
         <p className="text-[27px] text-white font-semibold">Book Wise</p>
       </Link>
@@ -24,7 +31,13 @@ const Header = async ({ session }: { session: Session }) => {
             <p className="text-[#ccc] fw-semibold">Library</p>
           </Link>
         </li>
-
+        {userRole[0]?.role === "ADMIN" && (
+          <li>
+            <Link href="/admin">
+              <p className="text-[snow] font-bold">Admin</p>
+            </Link>
+          </li>
+        )}
         <li>
           <Link
             href="/my-profile"
@@ -35,7 +48,7 @@ const Header = async ({ session }: { session: Session }) => {
                 {getInitials(session?.user?.name || "IN")}
               </AvatarFallback>
             </Avatar>
-            <p className="text-[#ccc] font-bold text-sm">
+            <p className="text-[#ccc] font-bold text-sm hidden md:block">
               {session?.user?.name}
             </p>
           </Link>
